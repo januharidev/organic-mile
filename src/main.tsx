@@ -1,19 +1,38 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowLeft,
   ArrowRight,
   BadgeCheck,
+  Building2,
   CheckCircle2,
+  Cog,
+  Download,
+  FileSpreadsheet,
+  FileText,
   Factory,
   Flame,
+  Hammer,
+  HardHat,
+  Layers3,
   Mail,
   MapPin,
   Menu,
   Phone,
   Recycle,
+  Route as RouteIcon,
   ShieldCheck,
+  ThermometerSun,
   X,
+  Waves,
+  Wind,
+  Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -53,6 +72,7 @@ const homeProducts = [
 
 const productDetails = [
   {
+    id: "product-a52",
     name: "POLY-FUEL A52",
     short: "Furnace Oil Eqv.",
     description:
@@ -60,10 +80,11 @@ const productDetails = [
     image: "/assets/a52-latest.jpg",
   },
   {
+    id: "product-a60",
     name: "POLY-FUEL A60",
     short: "L.D.O. Eqv.",
     description:
-      "A treated industrial fuel alternative designed for compatible applications traditionally using Light Diesel Oil (LDO). Engineered for stable performance.",
+      "A treated industrial fuel alternative designed for compatible applications traditionally using Light Diesel Oil (LDO). Engineered for stable performance. Treated and filtered up to 1 micron level.",
     image: "/assets/a60-latest.jpg",
   },
 ];
@@ -72,9 +93,9 @@ const slides = [
   {
     title: (
       <>
-        Turning Plastic Waste into
+        Turning Plastic Waste
         <br />
-        <span>Industrial Energy</span>
+        <span>into Industrial Energy</span>
       </>
     ),
     description:
@@ -123,6 +144,16 @@ const benefits = [
   "Suitable for boilers, furnaces and industrial heating systems",
 ];
 
+const benefitIcons: LucideIcon[] = [
+  Flame,
+  ShieldCheck,
+  Waves,
+  Wrench,
+  ThermometerSun,
+  Wind,
+  Factory,
+];
+
 const industries = [
   "Casting Industry",
   "Cement Industry",
@@ -132,15 +163,38 @@ const industries = [
   "Sponge Iron Industry",
 ];
 
+const homeApplications = [
+  "Hot Air Generators",
+  "Boilers",
+  "Furnaces",
+  "Industrial Heating Systems",
+];
+
+const applicationIcons: LucideIcon[] = [Wind, Factory, Flame, Cog];
+const industryIcons: LucideIcon[] = [
+  Hammer,
+  Layers3,
+  RouteIcon,
+  HardHat,
+  Recycle,
+  Building2,
+];
+
 type LinkButtonProps = {
   to: string;
   children: ReactNode;
   variant?: "yellow" | "blue" | "plain";
+  className?: string;
 };
 
-function LinkButton({ to, children, variant = "yellow" }: LinkButtonProps) {
+function LinkButton({
+  to,
+  children,
+  variant = "yellow",
+  className = "",
+}: LinkButtonProps) {
   return (
-    <Link className={`button-link button-${variant}`} to={to}>
+    <Link className={`button-link button-${variant} ${className}`} to={to}>
       {children}
     </Link>
   );
@@ -211,17 +265,70 @@ function Header() {
 function Footer() {
   return (
     <footer className="site-footer">
-      <div className="footer-inner">
-        <Link className="footer-brand" to="/">
-          <img src="/assets/logo.png" alt="Organic Mile Logo" />
-          <strong>ORGANIC MILE</strong>
-        </Link>
-        <p>© 2026 Organic Mile Private Limited. All rights reserved.</p>
-        <nav aria-label="Footer navigation">
+      <div className="footer-main">
+        <div className="footer-about">
+          <Link className="footer-brand" to="/">
+            <img src="/assets/logo.png" alt="Organic Mile Logo" />
+            <span>
+              <strong>ORGANIC MILE</strong>
+              <small>PRIVATE LIMITED</small>
+            </span>
+          </Link>
+          <p>
+            Converting difficult-to-recycle plastic waste into industrial-grade
+            alternative fuels for compatible heating applications.
+          </p>
+          <div className="footer-certifications" aria-label="Certifications">
+            <span>ISO 9001:2015</span>
+            <span>ISO 14001:2015</span>
+            <span>CPCB · KSPCB</span>
+          </div>
+        </div>
+        <nav className="footer-column" aria-label="Quick links">
+          <h2>Quick Links</h2>
           <Link to="/">Home</Link>
           <Link to="/about">About Us</Link>
           <Link to="/products">Products</Link>
+          <Link to="/#contact">Contact Us</Link>
         </nav>
+        <nav className="footer-column" aria-label="Our products">
+          <h2>Our Products</h2>
+          <Link to="/products#product-a52">POLY-FUEL A52</Link>
+          <Link to="/products#product-a60">POLY-FUEL A60</Link>
+          <Link to="/products#specifications">Technical Specifications</Link>
+        </nav>
+        <div className="footer-column footer-contact">
+          <h2>Get in Touch</h2>
+          <a href="tel:+919880876297">
+            <Phone aria-hidden="true" />
+            +91 98808 76297
+          </a>
+          <a href="mailto:info@organicmile.in">
+            <Mail aria-hidden="true" />
+            info@organicmile.in
+          </a>
+          <a
+            href="https://maps.google.com/?q=Baikampady+Industrial+Area,+New+Mangalore,+Karnataka"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <MapPin aria-hidden="true" />
+            <span>
+              Plot No. 100A, Baikampady Industrial Area, New Mangalore,
+              Karnataka – 575011
+            </span>
+          </a>
+          <Link className="footer-quote-link" to="/#contact">
+            Contact Us <ArrowRight aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>© 2026 ORGANIC MILE PRIVATE LIMITED. All rights reserved.</p>
+        <p>
+          Registered Plastic Waste Processor <span>·</span> EPR support for
+          eligible requirements
+        </p>
       </div>
     </footer>
   );
@@ -229,16 +336,39 @@ function Footer() {
 
 function CertificationStrip() {
   return (
-    <div className="certification-wrap">
+    <section className="certification-wrap" aria-label="Certifications and compliance">
+      <div className="certification-intro">
+        <span className="certification-kicker">Trust framework</span>
+        <h2 className="certification-heading">
+          Trust &amp;
+          <br />
+          <span>Compliance</span>
+        </h2>
+        <p className="certification-summary">
+          Quality, environmental standards &amp; responsible recovery.
+        </p>
+        <div className="certification-count" aria-label={`${certifications.length} credentials`}>
+          <strong>{String(certifications.length).padStart(2, "0")}</strong>
+          <span>credentials<br />in focus</span>
+        </div>
+      </div>
       <div className="certification-strip">
-        {certifications.map((certification) => (
+        {certifications.map((certification, index) => (
           <div className="certification" key={certification}>
-            <CheckCircle2 aria-hidden="true" />
-            <span>{certification}</span>
+            <div className="certification-card-top">
+              <span className="certification-mark">
+                <ShieldCheck aria-hidden="true" />
+              </span>
+              <span className="certification-index">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <span className="certification-name">{certification}</span>
+            <span className="certification-rule" aria-hidden="true" />
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -272,9 +402,15 @@ function HomeHero() {
         <div className="hero-shade" />
         <div className="hero-content">
           <div className="hero-copy-panel glass-panel">
+            <span className="hero-kicker">Waste to energy. Built for industry.</span>
             <h1>{slide.title}</h1>
             <p>{slide.description}</p>
-            <LinkButton to={slide.to}>{slide.action}</LinkButton>
+            <LinkButton to={slide.to} className="hero-explore-link">
+              <span className="hero-cta-label">{slide.action}</span>
+              <span className="hero-cta-icon">
+                <ArrowRight aria-hidden="true" />
+              </span>
+            </LinkButton>
           </div>
         </div>
         <button
@@ -331,12 +467,34 @@ function HomeProductCard({
 }
 
 function Home() {
+  const whyContentRef = useRef<HTMLDivElement>(null);
+  const [whyVisible, setWhyVisible] = useState(false);
+
+  useEffect(() => {
+    const content = whyContentRef.current;
+    if (!content) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setWhyVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(content);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <HomeHero />
       <section className="home-about section-shell">
-        <div className="home-about-card glass-panel">
+        <div className="home-about-copy">
           <span className="section-kicker">About Organic Mile</span>
+          <h2>A better use for difficult-to-recycle plastic</h2>
           <p>
             Organic Mile Private Limited is a Mangalore-based manufacturer
             focused on converting waste plastic into industrial-grade
@@ -349,13 +507,28 @@ function Home() {
             Know More About Us
           </LinkButton>
         </div>
+        <div className="home-about-visual">
+          <img
+            src="/assets/S2.jpg"
+            alt="Plastic waste transformed through pyrolysis into industrial energy"
+          />
+          <div className="process-caption">
+            <span>Waste plastic</span>
+            <ArrowRight aria-hidden="true" />
+            <span>Industrial energy</span>
+          </div>
+        </div>
       </section>
 
-      <section className="home-products section-shell">
+      <section className="home-products section-shell" id="products">
         <div className="section-heading">
           <div>
-            <span className="section-kicker">Featured Products</span>
-            <h2>Industrial Fuel Alternatives</h2>
+            <span className="section-kicker">Our Products</span>
+            <h2>Industrial fuels with a circular purpose</h2>
+            <p>
+              Explore the Poly-Fuel range for compatible boilers, furnaces and
+              industrial heating applications.
+            </p>
           </div>
         </div>
         <div className="home-product-grid">
@@ -373,47 +546,56 @@ function Home() {
           <span className="section-kicker">Why Poly-Fuel?</span>
           <h2>Advantages &amp; Applications</h2>
         </div>
-        <div className="why-grid">
-          <article className="glass-panel">
+        <div
+          className={`why-content${whyVisible ? " is-visible" : ""}`}
+          ref={whyContentRef}
+        >
+          <div className="why-column">
             <h3>Key Benefits</h3>
-            <ul className="benefit-list">
+            <ul className="why-benefit-list">
               {benefits.map((benefit) => (
-                <li key={benefit}>
-                  <CheckCircle2 aria-hidden="true" />
-                  {benefit}
-                </li>
+                <li key={benefit}>{benefit}</li>
               ))}
             </ul>
-          </article>
-          <article className="glass-panel application-panel">
+          </div>
+          <div className="why-column">
             <h3>Applications &amp; Industries</h3>
-            <div>
-              <p className="panel-label">Core Applications:</p>
-              <p>Hot Air Generators, Boilers, Furnaces, Industrial Heating Systems</p>
+            <div className="why-applications-copy">
+              <h4>Core Applications:</h4>
+              <p>{homeApplications.join(", ")}</p>
             </div>
-            <div>
-              <p className="panel-label">Industries We Serve:</p>
-              <div className="industry-tags">
+            <div className="why-industries">
+              <h4>Industries We Serve:</h4>
+              <div className="why-industry-tags">
                 {industries.map((industry) => (
                   <span key={industry}>{industry}</span>
                 ))}
               </div>
             </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      <section className="sustainability-section">
-        <div className="sustainability-card glass-panel section-shell">
-          <h2>Sustainability Snapshot</h2>
-          <p>
-            Organic Mile converts difficult-to-recycle plastic waste into usable
-            industrial fuel, helping recover value from waste while providing
-            an alternative to conventional industrial fuels for compatible
-            applications.
-          </p>
-        </div>
+      <section className="sector-download-section" aria-label="Sector spreadsheet">
+        <a
+          className="sector-spreadsheet-download"
+          href="/assets/organic-mile-essential-sectors.csv"
+          download="Organic-Mile-Essential-Sectors.csv"
+        >
+          <span className="sector-spreadsheet-icon">
+            <FileSpreadsheet aria-hidden="true" />
+            <Download aria-hidden="true" />
+          </span>
+          <span className="sector-spreadsheet-label">
+            <strong>Download Sector Spreadsheet</strong>
+            <small>Essential sectors, applications and product references · CSV</small>
+          </span>
+          <span className="sector-spreadsheet-action" aria-hidden="true">
+            <Download />
+          </span>
+        </a>
       </section>
+
       <Contact />
     </>
   );
@@ -422,85 +604,140 @@ function Home() {
 function Contact() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const subject = encodeURIComponent("Organic Mile website enquiry");
+    const body = encodeURIComponent(
+      [
+        `Name: ${formData.get("name")}`,
+        `Company: ${formData.get("company")}`,
+        `Phone / Email: ${formData.get("contact")}`,
+        `Estimated Monthly Fuel Requirement: ${formData.get("requirement")}`,
+        `Message: ${formData.get("message") || "Not provided"}`,
+      ].join("\n"),
+    );
+    window.location.href = `mailto:info@organicmile.in?subject=${subject}&body=${body}`;
   }
 
   return (
     <section className="contact-section" id="contact">
+      <div className="quote-cta">
+        <div>
+          <span>LET'S TALK FUEL</span>
+          <h2>Looking for an Alternative Industrial Fuel?</h2>
+          <p>
+            Talk to us about your application, current fuel usage and estimated
+            monthly requirement.
+          </p>
+        </div>
+        <a className="quote-cta-button" href="#quote-form">
+          Contact Us <ArrowRight aria-hidden="true" />
+        </a>
+      </div>
       <div className="contact-card glass-panel">
         <div className="contact-layout">
           <div className="contact-main">
-            <h2>Looking for an Alternative Industrial Fuel?</h2>
+            <span className="contact-kicker">START A CONVERSATION</span>
+            <h2>Contact Us</h2>
             <p>
               Talk to us about your application, current fuel usage and
               estimated monthly requirement.
             </p>
+            <div className="quote-contact-list">
+              <a href="tel:+919880876297">
+                <Phone aria-hidden="true" />
+                <span>
+                  <strong>CALL US</strong>
+                  +91 98808 76297
+                </span>
+              </a>
+              <a href="mailto:info@organicmile.in">
+                <Mail aria-hidden="true" />
+                <span>
+                  <strong>EMAIL US</strong>
+                  info@organicmile.in
+                </span>
+              </a>
+              <a
+                href="https://maps.google.com/?q=Baikampady+Industrial+Area,+New+Mangalore,+Karnataka"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MapPin aria-hidden="true" />
+                <span>
+                  <strong>VISIT US</strong>
+                  Plot No. 100A, Baikampady Industrial Area, New Mangalore, <br/>
+                  Karnataka – 575011 <br />
+                  GST: 29AAOCO9959L1ZO
+                </span>
+              </a>
+            </div>
+            
+          </div>
+          <div className="quote-form-card" id="quote-form">
+            <h3>Tell us what you need</h3>
+            <p>Complete the details below to prepare an enquiry in your email app.</p>
             <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-row">
-                <label>
-                  <span>Name</span>
-                  <input name="name" placeholder="Your Name" type="text" />
-                </label>
-                <label>
-                  <span>Company</span>
-                  <input name="company" placeholder="Company Name" type="text" />
-                </label>
-              </div>
               <label>
-                <span>Phone / Email</span>
-                <input name="contact" placeholder="Contact Details" type="text" />
+                <span>Name <b aria-hidden="true">*</b></span>
+                <input
+                  autoComplete="name"
+                  name="name"
+                  placeholder="Your full name"
+                  required
+                />
               </label>
               <label>
-                <span>Estimated Monthly Fuel Requirement</span>
-                <select name="requirement" defaultValue="">
-                  <option value="">Select an option...</option>
-                  <option value="&lt; 10 KL">Less than 10 KL</option>
-                  <option value="10 - 50 KL">10 - 50 KL</option>
-                  <option value="&gt; 50 KL">More than 50 KL</option>
-                </select>
+                <span>Company <b aria-hidden="true">*</b></span>
+                <input
+                  autoComplete="organization"
+                  name="company"
+                  placeholder="Company name"
+                  required
+                />
               </label>
               <label>
-                <span>Message (Optional)</span>
+                <span>Phone / Email <b aria-hidden="true">*</b></span>
+                <input
+                  autoComplete="email"
+                  name="contact"
+                  placeholder="Phone number or email"
+                  required
+                />
+              </label>
+              <label>
+                <span>
+                  Estimated Monthly Fuel Requirement{" "}
+                  <b aria-hidden="true">*</b>
+                </span>
+                <input
+                  name="requirement"
+                  placeholder="e.g. volume per month"
+                  required
+                />
+              </label>
+              <label className="quote-message-field">
+                <span>Message (optional)</span>
                 <textarea
                   name="message"
-                  placeholder="Tell us about your current fuel and application..."
+                  placeholder="Tell us about your fuel and application"
                   rows={3}
                 />
               </label>
               <button className="button-link button-yellow" type="submit">
-                Contact Us
+                Submit Enquiry <ArrowRight aria-hidden="true" />
               </button>
             </form>
           </div>
-          <aside className="company-details">
-            <h3>Company Details</h3>
-            <div className="company-identity">
-              <p className="company-name">ORGANIC MILE PRIVATE LIMITED</p>
-              <p>GST: 29AAOCO9959L1ZO</p>
-            </div>
-            <div className="detail-line address-line">
-              <span className="detail-icon">
-                <MapPin aria-hidden="true" />
-              </span>
-              <p>
-                Plot No. 100A, Baikampady Industrial Area,
-                <br />
-                New Mangalore, Karnataka – 575011
-              </p>
-            </div>
-            <a className="detail-line" href="tel:+919880876297">
-              <span className="detail-icon">
-                <Phone aria-hidden="true" />
-              </span>
-              <p>+91 98808 76297</p>
-            </a>
-            <a className="detail-line" href="mailto:info@organicmile.in">
-              <span className="detail-icon">
-                <Mail aria-hidden="true" />
-              </span>
-              <p>info@organicmile.in</p>
-            </a>
-          </aside>
         </div>
+      </div>
+      <div className="contact-map">
+        <iframe
+          title="Map showing Baikampady Industrial Area, New Mangalore"
+          src="https://www.google.com/maps?q=Baikampady+Industrial+Area,+New+Mangalore,+Karnataka&output=embed"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
       </div>
     </section>
   );
@@ -509,12 +746,14 @@ function Contact() {
 function PageHero({
   title,
   description,
+  compact = false,
 }: {
   title: ReactNode;
   description: string;
+  compact?: boolean;
 }) {
   return (
-    <section className="inner-page-hero">
+    <section className={`inner-page-hero${compact ? " inner-page-hero-compact" : ""}`}>
       <h1>{title}</h1>
       <p>{description}</p>
     </section>
@@ -538,6 +777,8 @@ function CertificationList() {
 }
 
 function About() {
+  const processPanelRef = useRef<HTMLDivElement>(null);
+  const [processVisible, setProcessVisible] = useState(false);
   const process = [
     {
       icon: <Recycle aria-hidden="true" />,
@@ -579,6 +820,24 @@ function About() {
       "Supports industrial supply chains, business activity and employment through waste recovery and manufacturing.",
     ],
   ];
+
+  useEffect(() => {
+    const panel = processPanelRef.current;
+    if (!panel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setProcessVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -641,10 +900,17 @@ function About() {
                 </p>
               </div>
             </div>
-            <div className="process-panel">
+            <div
+              className={`process-panel${processVisible ? " is-visible" : ""}`}
+              ref={processPanelRef}
+            >
               <div className="process-list">
                 {process.map((step, index) => (
-                  <div className="process-step" key={step.name}>
+                  <div
+                    className="process-step"
+                    key={step.name}
+                    style={{ animationDelay: `${index * 140}ms` }}
+                  >
                     <span className="process-icon">{step.icon}</span>
                     <div className="process-step-copy">
                       <h3>{step.name}</h3>
@@ -693,9 +959,10 @@ function About() {
 }
 
 const specifications = [
-  ["Gross Calorific Value (GCV)", "9,000 – 11,200 Kcal/kg"],
+  ["Gross Calorific Value (GCV)", "10,600–11,800 Kcal/kg"],
   ["Density (at 15°C / 30°C)", "0.75 – 0.95 g/cm³"],
-  ["Flash Point", "46°C – 100°C"],
+  ["Flash Point", "28°C"],
+  ["Pour Point", "< -13°C"],
   ["Viscosity (at 40°C / 50°C)", "1.98 – 20 cSt"],
   ["Sulphur Content", "< 1.0%"],
   ["Ash Content", "< 0.1%"],
@@ -759,14 +1026,55 @@ function ProductCard({
 }
 
 function Products() {
+  const benefitsGridRef = useRef<HTMLDivElement>(null);
+  const applicationsRef = useRef<HTMLDivElement>(null);
+  const [benefitsVisible, setBenefitsVisible] = useState(false);
+  const [applicationsVisible, setApplicationsVisible] = useState(false);
   const applications = [
     ["Hot Air Generators", "Boilers", "Furnaces & Industrial Heating"],
     industries.slice(0, 5).concat("Sponge Iron"),
   ];
 
+  useEffect(() => {
+    const grid = benefitsGridRef.current;
+    if (!grid) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setBenefitsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const panel = applicationsRef.current;
+    if (!panel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setApplicationsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <PageHero
+        compact
         title={
           <>
             Our <span>Products</span>
@@ -777,10 +1085,12 @@ function Products() {
       <section className="products-section section-shell">
         <div className="product-grid">
           {productDetails.map((product) => (
-            <ProductCard key={product.name} product={product} />
+            <div id={product.id} key={product.name}>
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
-        <div className="specification-panel glass-panel">
+        <div className="specification-panel glass-panel" id="specifications">
           <h3>Technical Specifications</h3>
           <div className="table-wrap">
             <table>
@@ -808,9 +1118,16 @@ function Products() {
           <span className="section-kicker">Key Benefits</span>
           <h2>Advantages of using Poly-fuel</h2>
         </div>
-        <div className="product-benefit-grid">
+        <div
+          className={`product-benefit-grid${benefitsVisible ? " is-visible" : ""}`}
+          ref={benefitsGridRef}
+        >
           {productBenefits.map(([title, description, Icon], index) => (
-            <article className="glass-panel" key={title}>
+            <article
+              className="glass-panel"
+              key={title}
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               <span className="benefit-number">0{index + 1}</span>
               <h3>
                 <Icon aria-hidden="true" />
@@ -820,9 +1137,16 @@ function Products() {
             </article>
           ))}
         </div>
-        <div className="applications-industries">
-          <article>
+        <div
+          className={`applications-industries${applicationsVisible ? " is-visible" : ""}`}
+          ref={applicationsRef}
+        >
+          <article className="applications-detail-card glass-panel">
+            <span className="applications-kicker">Where it works</span>
             <h3>Core Applications</h3>
+            <p className="applications-tagline">
+              Practical applications for everyday industrial heating.
+            </p>
             <ul>
               {applications[0].map((application) => (
                 <li key={application}>
@@ -832,8 +1156,12 @@ function Products() {
               ))}
             </ul>
           </article>
-          <article>
-            <h3>Industries Served</h3>
+          <article className="applications-detail-card glass-panel">
+            <span className="applications-kicker">Who we support</span>
+            <h3>Industries We Serve</h3>
+            <p className="applications-tagline">
+              Fuel solutions for diverse, energy-intensive sectors.
+            </p>
             <div className="industry-tags">
               {applications[1].map((industry) => (
                 <span key={industry}>{industry}</span>
@@ -841,6 +1169,25 @@ function Products() {
             </div>
           </article>
         </div>
+        <section className="product-download-wrap section-shell">
+          <div className="product-download-copy">
+            <span className="section-kicker">Product Information</span>
+            <h2>Download Product Spec Sheet</h2>
+            <p>
+              Product photographs, target specifications, key advantages and
+              application information in one PDF.
+            </p>
+          </div>
+          <a
+            className="product-download-button"
+            href="/assets/organic-mile-product-spec-sheet.pdf"
+            download="Organic-Mile-Product-Spec-Sheet.pdf"
+          >
+            <FileText aria-hidden="true" />
+            <span>Download Product Spec Sheet</span>
+            <Download aria-hidden="true" />
+          </a>
+        </section>
       </section>
     </>
   );
@@ -882,20 +1229,32 @@ function RouteEffects() {
   return null;
 }
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <>
       <RouteEffects />
       <Header />
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="route-swap" key={location.pathname}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </main>
       <Footer />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AppContent />
     </BrowserRouter>
   );
 }
